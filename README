@@ -1,0 +1,8 @@
+This script reverts the recent `NIGGER' spam on emacswiki, which only
+allows one to get 10 pages in a 20 second timeframe:
+
+    for page in $(cat list); do sleep 21 && perl emacswiki-revert-niggers http://www.emacswiki.org/cgi-bin/wiki/$page; done
+
+Or run this so everyone doesn't do it in the same order:
+
+    for page in $(cat list | perl -0777 -MList::Util=shuffle -e '@list = <> =~ m/(\S+)/g; print "$_\n" for shuffle @list'); do sleep 21 && perl emacswiki-revert-niggers http://www.emacswiki.org/cgi-bin/wiki/$page; done
