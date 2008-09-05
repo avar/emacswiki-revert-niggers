@@ -15,7 +15,7 @@ unless (is_nigger($mech->content))
     exit 0;
 }
 
-print STDERR "NOT OK - Reverting niggers on $url\n";
+print STDERR "NOT OK - Niggers on $url, going to revert\n";
 
 $mech->follow_link( text_regex => qr/View other revisions/ );
 
@@ -37,7 +37,7 @@ print STDERR "Submitting form with a nigger-free revision of the page\n";
 my $ret = $mech->submit_form(
     form_number => 2,
     fields => { 
-        summary => 'Experimental nigger revertor in progress',
+        summary => 'Nigger revertor in progress',
         answer => 'emacs',
         username => 'nigger-revert-o-tron',
     },
@@ -50,7 +50,11 @@ if ($ret) {
     print STDERR "NOT OK - Failed to revert $url\n";
 }
 
-sub is_nigger { $_[0] =~ /A nigger on fire/ }
+sub is_nigger {
+    $_[0] =~ /A nigger on fire/
+    or
+    $_[0] =~ /Jewpiter/
+}
 
 sub get_revision_links
 {
