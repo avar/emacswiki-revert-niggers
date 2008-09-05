@@ -1,0 +1,67 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use WWW::Mechanize;
+
+my $mech = WWW::Mechanize->new();
+
+my $url = $ARGV[0];
+
+$mech->get( $url );
+
+unless (is_nigger($mech->content))
+{
+    print STDERR "OK - No niggers at $url\n";
+    exit 0;
+}
+
+print STDERR "NOT OK - Reverting niggers on $url\n";
+
+$mech->follow_link( text_regex => qr/View other revisions/ );
+
+my @revisions = get_revision_links(@{ $mech->links() });
+
+# Follow the second most recent revision
+$mech->follow_link(url => $revisions[1]->url);
+
+if (is_nigger($mech->content))
+{
+    print STDERR "PANIC - Second latest revision is also a nigger\n";
+    exit 1;
+}
+
+$mech->follow_link( text_regex => qr/Edit revision \d+ of this page/ );
+
+print STDERR "Submitting form with a nigger-free revision of the page\n";
+
+my $ret = $mech->submit_form(
+    form_number => 2,
+    fields => { 
+        summary => 'Experimental nigger revertor in progress',
+        answer => 'emacs',
+        username => 'nigger-revert-o-tron',
+    },
+    button => "Save",
+);
+
+if ($ret) {
+    print STDERR "OK - Reverted $url\n";
+} else {
+    print STDERR "NOT OK - Failed to revert $url\n";
+}
+
+sub is_nigger { $_[0] =~ /A nigger on fire/ }
+
+sub get_revision_links
+{
+    my @ret;
+
+    for my $link (@_)
+    {
+        if ($link->text =~ /^Revision \d+/) {
+            push @ret => $link;
+        }
+    }
+
+    return @ret;
+}

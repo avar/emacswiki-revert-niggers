@@ -1,0 +1,43 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use WWW::Mechanize;
+use Storable;
+
+my $db;
+if (-f "$0.storable") {
+    $db = retrieve("$0.storable");
+}
+
+my $mech = WWW::Mechanize->new;
+
+$mech->get( "http://www.emacswiki.org/cgi-bin/wiki?action=rss;days=7;all=0;showedit=0" );
+
+my $content = $mech->content();
+my @links = $content =~ m[<link>(.*?)</link>]g;
+
+for my $link (@links) {
+    unless ($link =~ m<^http://www\.emacswiki\.org/cgi-bin/wiki/(.+)$>)
+    {
+        print STDERR "ERROR: Link $link does not match regex\n";
+        next;
+    }
+
+    if (exists $db->{$link}) {
+        print STDERR "Already went over $link the last time, skipping\n";
+        next;
+    }
+
+    print STDERR "Going over $link\n";
+
+    system "$^X emacswiki-revert-niggers $link" and die "error running nigger-revert-o-tron: $!";
+
+    # Mark as done
+    $db->{$link} = 1;
+
+    sleep 10;
+}
+
+store($db, "$0.storable");
+
+
